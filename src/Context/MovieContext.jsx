@@ -1,45 +1,179 @@
 import { createContext, useState, useEffect, useContext } from "react";
 
-const MovieContext = createContext()
+import { addFavorite, getFavorites, removeFavorite } from "../Services/favoriteApi";
 
-export const useMovieContext = () => useContext(MovieContext)
+const MovieContext = createContext();
 
-export const MovieProvider = ({children}) => {
-    const [favorites, setFavorites] = useState([])
+export const useMovieContext = () => useContext(MovieContext);
 
-    useEffect(()=>{
-        const storedFavs = localStorage.getItem("favorites")
+export const MovieProvider = ({ children }) => {
 
-        if(storedFavs) setFavorites(JSON.parse(storedFavs)) 
-    }, [])
+    const [favorites, setFavorites] = useState([]);
 
-    useEffect(()=>{
-        localStorage.setItem("favorites", JSON.stringify(favorites))
-    }, [favorites])
+    //
+    // LOAD FAVORITES FROM DATABASE
+    //
+    useEffect(() => {
 
-    const addToFavorites = (movie) => {
-            setFavorites(prev => [...prev, movie])
-        }
+        const loadFavorites =
+            async () => {
 
-    const removeFromFavorites = (movieId) => {
-        setFavorites(prev => prev.filter(movie => movie.id !== movieId))
-    }
-    
-    const isFavorite = (movieId) => {
-        return favorites.some(movie => movie.id === movieId)
-    }
+                try {
 
-    const value= {
+                    const userData =
+                        localStorage.getItem("user");
+
+                    if (
+                        !userData ||
+                        userData === "undefined"
+                    ) return;
+
+                    const user =
+                        JSON.parse(userData);
+
+                    const data =
+                        await getFavorites(user.id);
+
+                    // extract movie data
+                    const movies =
+                        data.map(
+
+                            item =>
+                                item.movieData
+                        );
+
+                    setFavorites(movies);
+
+                } catch (err) {
+
+                    console.log(err);
+                }
+            };
+
+        loadFavorites();
+
+    }, []);
+
+    //
+    // ADD FAVORITE
+    //
+    const addToFavorites =
+        async (movie) => {
+
+            try {
+
+                const userData =
+                    localStorage.getItem("user");
+
+                if (
+                    !userData ||
+                    userData === "undefined"
+                ) return;
+
+                const user =
+                    JSON.parse(userData);
+
+                // save to MongoDB
+                await addFavorite({
+
+                    userId: user.id,
+
+                    movieId: movie.id,
+
+                    movieData: movie
+                });
+
+                // update frontend
+                setFavorites(prev => [
+
+                    ...prev,
+
+                    movie
+                ]);
+
+            } catch (err) {
+
+                console.log(err);
+            }
+        };
+
+    //
+    // REMOVE FAVORITE
+    //
+    const removeFromFavorites =
+        async (movieId) => {
+
+            try {
+
+                const userData =
+                    localStorage.getItem("user");
+
+                if (
+                    !userData ||
+                    userData === "undefined"
+                ) return;
+
+                const user =
+                    JSON.parse(userData);
+
+                // remove from MongoDB
+                await removeFavorite(
+
+                    user.id,
+
+                    movieId
+                );
+
+                // update frontend
+                setFavorites(prev =>
+
+                    prev.filter(
+
+                        movie =>
+                            movie.id !== movieId
+                    )
+                );
+
+            } catch (err) {
+
+                console.log(err);
+            }
+        };
+
+    //
+    // CHECK FAVORITE
+    //
+    const isFavorite =
+        (movieId) => {
+
+            return favorites.some(
+
+                movie =>
+                    movie.id === movieId
+            );
+        };
+
+    const value = {
+
         favorites,
+
         setFavorites,
+
         addToFavorites,
+
         removeFromFavorites,
+
         isFavorite
-    }
+    };
 
     return (
-        <MovieContext.Provider value={value}>
+
+        <MovieContext.Provider
+            value={value}
+        >
+
             {children}
+
         </MovieContext.Provider>
     );
 };

@@ -8,7 +8,9 @@ import { MovieProvider } from './Context/MovieContext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <MovieProvider>
+        <App />
+      </MovieProvider>
     </BrowserRouter>
   </StrictMode>,
 )
