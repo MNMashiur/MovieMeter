@@ -2,7 +2,7 @@ export const addFavorite =async (data) => {
 
     const res = await fetch(
 
-      "http://localhost:5000/api/favorites",
+      "https://moviemeter-apx3.onrender.com/api/favorites",
 
       {
 
@@ -25,7 +25,7 @@ export const getFavorites =
 
     const res = await fetch(
 
-      `http://localhost:5000/api/favorites/${userId}`
+      `https://moviemeter-apx3.onrender.com/api/favorites/${userId}`
     );
 
     return res.json();
@@ -36,7 +36,7 @@ export const removeFavorite =
 
     const res = await fetch(
 
-      `http://localhost:5000/api/favorites/${userId}/${movieId}`,
+      `https://moviemeter-apx3.onrender.com/api/favorites/${userId}/${movieId}`,
 
       {
 

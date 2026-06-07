@@ -3,7 +3,7 @@ export const addReview =
 
     const res = await fetch(
 
-      "http://localhost:5000/api/reviews",
+      "https://moviemeter-apx3.onrender.com/api/reviews",
 
       {
 
@@ -26,7 +26,7 @@ export const getReviews =
 
     const res = await fetch(
 
-      `http://localhost:5000/api/reviews/${movieId}`
+      `https://moviemeter-apx3.onrender.com/api/reviews/${movieId}`
     );
 
     return res.json();

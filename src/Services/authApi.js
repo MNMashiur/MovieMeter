@@ -1,6 +1,6 @@
 export const registerUser = async (data) => {
   const res = await fetch(
-    "http://localhost:5000/api/auth/register",
+    "https://moviemeter-apx3.onrender.com/api/auth/register",
     {
       method: "POST",
       headers: {
@@ -15,7 +15,7 @@ export const registerUser = async (data) => {
 
 export const loginUser = async (data) => {
   const res = await fetch(
-    "http://localhost:5000/api/auth/login",
+    "https://moviemeter-apx3.onrender.com/api/auth/login",
     {
       method: "POST",
       headers: {

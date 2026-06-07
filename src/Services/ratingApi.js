@@ -1,7 +1,7 @@
 export const submitRating = async (data) => {
 
   const res = await fetch(
-    "http://localhost:5000/api/ratings/rate",
+    "https://moviemeter-apx3.onrender.com/api/ratings/rate",
     {
       method: "POST",
 
@@ -19,7 +19,7 @@ export const submitRating = async (data) => {
 export const getAverageRating = async (movieId) => {
 
   const res = await fetch(
-    `http://localhost:5000/api/ratings/average/${movieId}`
+    `https://moviemeter-apx3.onrender.com/api/ratings/average/${movieId}`
   );
 
   return res.json();
