@@ -19,7 +19,7 @@ export const addReview =
     );
 
     return res.json();
-};
+  };
 
 export const getReviews =
   async (movieId) => {
@@ -29,5 +29,10 @@ export const getReviews =
       `https://moviemeter-apx3.onrender.com/api/reviews/${movieId}`
     );
 
-    return res.json();
-};
+    const data =
+      await res.json();
+
+    console.log(data);
+
+    return data;
+  };
