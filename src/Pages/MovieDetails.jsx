@@ -114,7 +114,7 @@ function MovieDetails() {
 
                         movieId: Number(id),
 
-                        userId: user.id,
+                        userId: user._id,
 
                         rating: Number(rating),
 

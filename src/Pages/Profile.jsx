@@ -60,7 +60,7 @@ function Profile() {
 
       const response = await fetch(
 
-        `https://moviemeter-apx3.onrender.com/api/auth/update/${storedUser.id}`,
+        `https://moviemeter-apx3.onrender.com/api/auth/update/${storedUser._id}`,
 
         {
 

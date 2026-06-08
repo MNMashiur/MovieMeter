@@ -56,7 +56,7 @@ export const MovieProvider = ({ children }) => {
 
                     const data =
                         await getFavorites(
-                            user.id
+                            user._id
                         );
 
                     // extract movie data
@@ -111,7 +111,7 @@ export const MovieProvider = ({ children }) => {
                 // save to MongoDB
                 await addFavorite({
 
-                    userId: user.id,
+                    userId: user._id,
 
                     movieId: movie.id,
 
@@ -145,7 +145,7 @@ export const MovieProvider = ({ children }) => {
                 // remove from MongoDB
                 await removeFavorite(
 
-                    user.id,
+                    user._id,
 
                     movieId
                 );
