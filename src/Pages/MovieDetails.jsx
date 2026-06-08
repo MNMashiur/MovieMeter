@@ -39,9 +39,9 @@ function MovieDetails() {
 
                 const reviewData = await getReviews(id);
 
-                setReviews(reviewData.reviews);
+                setReviews(reviewData?.reviews || []);
 
-                setAverageRating(<reviewData className="averageRating"></reviewData>);
+                setAverageRating(reviewData?.averageRating || 0);
 
                 const movieData =
                     await movieRes.json();
