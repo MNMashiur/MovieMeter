@@ -87,7 +87,9 @@ function MovieDetails() {
         );
 
     const handleReviewSubmit =
-        async () => {
+        async (e) => {
+
+            e.preventDefault();
 
             const token =
                 localStorage.getItem("token");
@@ -105,18 +107,46 @@ function MovieDetails() {
                     localStorage.getItem("user")
                 );
 
-            await addReview({
+            try {
 
-                movieId: Number(id),
+                const result =
+                    await addReview({
 
-                userId: user._id,
+                        movieId: Number(id),
 
-                rating,
+                        userId: user._id,
 
-                review: reviewText
-            });
+                        rating: Number(rating),
 
-            window.location.reload();
+                        review: reviewText
+                    });
+
+                console.log(result);
+
+                // fetch updated reviews
+                const updatedReviews =
+                    await getReviews(id);
+
+                setReviews(
+                    updatedReviews?.reviews || []
+                );
+
+                setAverageRating(
+                    updatedReviews?.averageRating || 0
+                );
+
+                // clear form
+                setReviewText("");
+
+                setRating(5);
+
+            } catch (err) {
+
+                console.log(
+                    "Review submit error:",
+                    err
+                );
+            }
         };
 
     return (
@@ -255,6 +285,7 @@ function MovieDetails() {
                                 </select>
 
                                 <button
+                                    type="button"
                                     onClick={handleReviewSubmit}
                                 >
                                     Submit Review
