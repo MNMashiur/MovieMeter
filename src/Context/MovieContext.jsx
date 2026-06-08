@@ -8,10 +8,37 @@ export const useMovieContext = () => useContext(MovieContext);
 
 export const MovieProvider = ({ children }) => {
 
-    const [favorites, setFavorites] = useState([]);
+    const [favorites, setFavorites] =
+        useState([]);
+
+    const [user, setUser] =
+        useState(null);
 
     //
-    // LOAD FAVORITES FROM DATABASE
+    // LOAD USER
+    //
+    useEffect(() => {
+
+        const userData =
+            localStorage.getItem("user");
+
+        if (
+
+            userData &&
+
+            userData !== "undefined"
+
+        ) {
+
+            setUser(
+                JSON.parse(userData)
+            );
+        }
+
+    }, []);
+
+    //
+    // LOAD FAVORITES
     //
     useEffect(() => {
 
@@ -20,19 +47,17 @@ export const MovieProvider = ({ children }) => {
 
                 try {
 
-                    const userData =
-                        localStorage.getItem("user");
+                    if (!user) {
 
-                    if (
-                        !userData ||
-                        userData === "undefined"
-                    ) return;
+                        setFavorites([]);
 
-                    const user =
-                        JSON.parse(userData);
+                        return;
+                    }
 
                     const data =
-                        await getFavorites(user.id);
+                        await getFavorites(
+                            user.id
+                        );
 
                     // extract movie data
                     const movies =
@@ -52,7 +77,7 @@ export const MovieProvider = ({ children }) => {
 
         loadFavorites();
 
-    }, []);
+    }, [user]);
 
     //
     // ADD FAVORITE
@@ -62,16 +87,26 @@ export const MovieProvider = ({ children }) => {
 
             try {
 
-                const userData =
-                    localStorage.getItem("user");
+                if (!user) {
 
-                if (
-                    !userData ||
-                    userData === "undefined"
-                ) return;
+                    window.location.href =
+                        "/login";
 
-                const user =
-                    JSON.parse(userData);
+                    return;
+                }
+
+                // avoid duplicates
+                const alreadyExists =
+                    favorites.some(
+
+                        fav =>
+                            fav.id === movie.id
+                    );
+
+                if (alreadyExists) {
+
+                    return;
+                }
 
                 // save to MongoDB
                 await addFavorite({
@@ -105,16 +140,7 @@ export const MovieProvider = ({ children }) => {
 
             try {
 
-                const userData =
-                    localStorage.getItem("user");
-
-                if (
-                    !userData ||
-                    userData === "undefined"
-                ) return;
-
-                const user =
-                    JSON.parse(userData);
+                if (!user) return;
 
                 // remove from MongoDB
                 await removeFavorite(
@@ -153,6 +179,29 @@ export const MovieProvider = ({ children }) => {
             );
         };
 
+    //
+    // REFRESH USER AFTER LOGIN
+    //
+    const refreshUser =
+        () => {
+
+            const userData =
+                localStorage.getItem("user");
+
+            if (
+
+                userData &&
+
+                userData !== "undefined"
+
+            ) {
+
+                setUser(
+                    JSON.parse(userData)
+                );
+            }
+        };
+
     const value = {
 
         favorites,
@@ -163,7 +212,9 @@ export const MovieProvider = ({ children }) => {
 
         removeFromFavorites,
 
-        isFavorite
+        isFavorite,
+
+        refreshUser
     };
 
     return (
@@ -177,3 +228,5 @@ export const MovieProvider = ({ children }) => {
         </MovieContext.Provider>
     );
 };
+
+export default MovieContext;
