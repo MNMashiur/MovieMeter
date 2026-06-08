@@ -114,7 +114,7 @@ function MovieDetails() {
 
                         movieId: Number(id),
 
-                        userId: user._id,
+                        userId: user.id,
 
                         rating: Number(rating),
 
@@ -163,8 +163,7 @@ function MovieDetails() {
                             ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
 
                             : "none"
-                }}
-            >
+                }}>
 
                 <div className="overlay">
 
@@ -208,11 +207,8 @@ function MovieDetails() {
                             <p className="overview">
 
                                 {movie.overview}
-
                             </p>
-
                             <p>
-
                                 <strong>
                                     Director:
                                 </strong>
@@ -220,11 +216,8 @@ function MovieDetails() {
                                 {" "}
 
                                 {director?.name || "Unknown"}
-
                             </p>
-
                             <p>
-
                                 <strong>
                                     Cast:
                                 </strong>
