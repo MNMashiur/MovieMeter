@@ -1,77 +1,114 @@
 import { Link } from "react-router-dom";
+
 import "../CSS/Navbar.css";
 
+import {useMovieContext} from "../Context/MovieContext";
+
 function NavBar() {
-  const token = localStorage.getItem("token");
+
+  const {
+    refreshUser
+  } = useMovieContext();
+
+  const token =
+    localStorage.getItem("token");
 
   const userData =
-  localStorage.getItem("user");
+    localStorage.getItem("user");
 
-let user = null;
+  let user = null;
 
-try {
+  try {
 
-  user =
-    userData &&
-    userData !== "undefined"
-      ? JSON.parse(userData)
-      : null;
+    user =
 
-} catch {
+      userData &&
 
-  user = null;
-}
+      userData !== "undefined"
+
+        ? JSON.parse(userData)
+
+        : null;
+
+  } catch {
+
+    user = null;
+  }
 
   return (
+
     <nav className="navbar">
 
       <div className="navbar-brand">
+
         <Link to="/">
+
           MovieMeter
+
         </Link>
+
       </div>
 
       <div className="navbar-links">
 
-        <Link to="/" className="nav-link">
+        <Link
+          to="/"
+          className="nav-link"
+        >
+
           Home
+
         </Link>
 
-        <Link to="/favorites" className="nav-link">
+        <Link
+          to="/favorites"
+          className="nav-link"
+        >
+
           Favorites
+
         </Link>
 
         {
-  token && user ? (
 
-    <Link
-      to="/profile"
-      className="profile-avatar"
-    >
+          token && user?._id ? (
 
-      <div className="profile-circle">
+            <Link
 
-        {
-          user?.firstName
-            ?.charAt(0)
-            ?.toUpperCase()
+              to="/profile"
+
+              className="profile-avatar"
+            >
+
+              <div className="profile-circle">
+
+                {
+
+                  user?.firstName
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                }
+
+              </div>
+
+            </Link>
+
+          ) : (
+
+            <Link
+
+              to="/login"
+
+              className="nav-link login-btn"
+            >
+
+              Login
+
+            </Link>
+
+          )
         }
-
-      </div>
-
-    </Link>
-
-  ) : (
-
-    <Link
-      to="/login"
-      className="nav-link login-btn"
-    >
-      Login
-    </Link>
-
-  )
-}
 
       </div>
 
